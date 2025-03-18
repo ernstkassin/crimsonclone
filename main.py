@@ -172,7 +172,7 @@ while 1:
                         enemyX.append(random.randint(0,1100))
                         enemyY.append(random.randint(-100,0))
     #enemyX_change.append(0.5)
-                        enemyY_change = 0.05*(1.1)**5
+                        enemyY_change = 0.25*(1.1)**5
                     score = 0
                     attempts = 1
                     end_text = ""
