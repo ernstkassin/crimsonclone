@@ -8,33 +8,54 @@ import pygame
 import random
 import numpy as np
 import time 
-import requests
-import matplotlib.pyplot as plt
+#import requests
+#import matplotlib.pyplot as plt
 
+import os
 
+#import gc
+#os.chdir(r'C:\Users\Ernst\Documents\projects\games\crimsonclone\assets')
+
+# Get the path to the script's directory (works on GitHub and locally)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Define assets directory relative to the script
+ASSETS_DIR = os.path.join(BASE_DIR, "assets")
+
+# dont bother asking permissions for sound files when initializing pygame
+pygame.mixer.quit()
+# intialize pygame
 pygame.init()
+print("Initializing game...")  # Debugging initialization
 
 #init dictionary of words
 font = pygame.font.SysFont('cambria', 33)
 
 
-dictionary = np.genfromtxt('crimsonwords.txt',delimiter='\n',dtype='str')
+               
+
+try: 
+    dictionary = np.genfromtxt(os.path.join(ASSETS_DIR, 'crimsonwords.txt'), delimiter='\n', dtype='str')
+    print(f"Loaded {len(dictionary)} words.")  # Debug
+except Exception as e:
+    print(f"Error loading dictionary: {e}")  # Debug
 #dictionary = np.genfromtxt('words.txt',delimiter='\n',dtype='str')
 
 
 #dictionary = np.loadtxt('woods.txt',delimiter='\n',dtype='str')
 #dictionary = np.concatenate(np.char.split(dictionary, sep=' '))
 
-high_score = int(np.loadtxt('high_score.txt'))
+high_score = int(np.loadtxt(os.path.join(ASSETS_DIR, 'high_score.txt')))
 # init screen
 screen = pygame.display.set_mode((1200,900))
 # title and icon
 pygame.display.set_caption("Space Invaders")
+print("Screen initialized.")  # Debug
 #icon = pygame.image.load('spaceship.png')
 #pygame.display.set_icon(icon)
 
 # player
-playerImg = pygame.image.load('player.png')
+playerImg = pygame.image.load(os.path.join(ASSETS_DIR, 'player.png'))
 playerX = 600
 playerY = 800
 playerX_change = 0
@@ -43,29 +64,30 @@ user_text = ''
 
 
 # enemy
-enemyImg = []
-enemyX = []
-enemyY = []
-enemyX_change = []
-enemyWord = []
-num_enemies = 4
+#enemyImg = []
+#enemyX = []
+#enemyY = []
+#enemyX_change = []
+#enemyWord = []
+#num_enemies = 4
 
 wpm_arr,accuracy_arr = [],[]
 
-for i in range(num_enemies):
-    enemyImg.append(pygame.image.load('monster.png'))
-    enemyWord.append(dictionary[np.random.randint(len(dictionary))])
-    enemyX.append(random.randint(0,1100))
-    enemyY.append(random.randint(0,50))
-    #enemyX_change.append(0.5)
-    enemyY_change = 0.05*(1.1)**5
+num_enemies = 4
 
+enemyImg = [pygame.image.load(os.path.join(ASSETS_DIR, 'monster.png')) for _ in range(num_enemies)]
+enemyX = [random.randint(0, 1100) for _ in range(num_enemies)]
+enemyY = [random.randint(0, 50) for _ in range(num_enemies)]
+enemyWord = [random.choice(dictionary) for _ in range(num_enemies)]  # Safe word selection
+
+#enemyY_change = 0.05 * (1.1) ** 5  # Ensuring this is initialized only once
+enemyY_change = 0.25 * (1.1) ** 5 
 # bullet
-bulletImg = pygame.image.load('bullet.png')
+bulletImg = pygame.image.load(os.path.join(ASSETS_DIR, 'bullet.png'))
 bulletX = 0
 bulletY = 480
 bulletX_change = 0
-bulletY_change = 8
+bulletY_change = 8*5
 bullet_state = "ready"
 
 end_text = ""
@@ -145,7 +167,7 @@ while 1:
                     num_enemies = 5
 
                     for i in range(num_enemies):
-                        enemyImg.append(pygame.image.load('monster.png'))
+                        enemyImg.append(pygame.image.load(os.path.join(ASSETS_DIR, 'monster.png')))
                         enemyWord.append(dictionary[np.random.randint(len(dictionary))])
                         enemyX.append(random.randint(0,1100))
                         enemyY.append(random.randint(-100,0))
@@ -156,13 +178,13 @@ while 1:
                     end_text = ""
                     start_time = time.time()
                     wpm_arr,accuracy_arr = [],[]
-               elif word == "plot":
-                   plt.figure(0)
-                   xvec = np.linspace(0,len(wpm_arr),len(wpm_arr))
-                   plt.plot(xvec[1:],wpm_arr[1:],label = 'wpm')
-                   plt.plot(xvec[1:],accuracy_arr[1:],label = 'accuracy')
-                   plt.legend()
-                   plt.show()
+              # elif word == "plot":
+              #     plt.figure(0)
+              #     xvec = np.linspace(0,len(wpm_arr),len(wpm_arr))
+              #     plt.plot(xvec[1:],wpm_arr[1:],label = 'wpm')
+              #     plt.plot(xvec[1:],accuracy_arr[1:],label = 'accuracy')
+              #     plt.legend()
+              #     plt.show()
                 
 
                user_text = []
