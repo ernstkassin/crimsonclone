@@ -111,7 +111,7 @@ def score_(x,y,score,user_text):
 def enemy(x,y,i):
     text = font.render(enemyWord[i], True, (0,0,255))
     screen.blit(enemyImg[i],(x,y))
-    screen.blit(text,(x,y+20))
+    screen.blit(text,(x,y+30))
 
 def fire_bullet(x,y):
     global bullet_state
