@@ -1,2 +1,2 @@
 # crimsonclone
-ernstkassin.github.io/crimsonclone
+[Play Here](https://ernstkassin.github.io/crimsonclone)
